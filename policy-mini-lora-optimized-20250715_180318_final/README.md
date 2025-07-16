@@ -6,202 +6,249 @@ tags:
 - base_model:adapter:microsoft/Phi-4-mini-reasoning
 - lora
 - transformers
+- policy-analysis
+- civic-tech
+- government
+- document-summarization
 ---
 
-# Model Card for Model ID
+# OpenCivics AI Model
 
-<!-- Provide a quick summary of what the model is/does. -->
+A specialized language model fine-tuned for policy analysis, document summarization, and civic engagement tasks. Built on Microsoft's Phi-4-mini-reasoning architecture with LoRA (Low-Rank Adaptation) fine-tuning specifically for Australian policy documents and civic technology applications.
 
+## Quick Start
 
+```bash
+# Interactive mode
+python policy_llm/cli.py --interactive
+
+# Analyze a policy document
+python policy_llm/cli.py --file policy_document.txt --output analysis.txt
+
+# Direct prompt
+python policy_llm/cli.py --prompt "Summarize the key stakeholders in this housing policy"
+```
 
 ## Model Details
 
 ### Model Description
 
-<!-- Provide a longer summary of what this model is. -->
+The OpenCivics AI Model is a fine-tuned version of Microsoft's Phi-4-mini-reasoning model, specifically optimized for policy analysis and civic engagement tasks. This model democratizes access to sophisticated document analysis capabilities that were previously available only to well-resourced institutions.
 
+- **Developed by:** OpenCivics Initiative
+- **Model type:** Causal Language Model (Fine-tuned with LoRA)
+- **Language(s):** English (Australian policy context)
+- **License:** Apache 2.0
+- **Base model:** microsoft/Phi-4-mini-reasoning
+- **Fine-tuning method:** LoRA (Low-Rank Adaptation)
 
+### Model Sources
 
-- **Developed by:** [More Information Needed]
-- **Funded by [optional]:** [More Information Needed]
-- **Shared by [optional]:** [More Information Needed]
-- **Model type:** [More Information Needed]
-- **Language(s) (NLP):** [More Information Needed]
-- **License:** [More Information Needed]
-- **Finetuned from model [optional]:** [More Information Needed]
-
-### Model Sources [optional]
-
-<!-- Provide the basic links for the model. -->
-
-- **Repository:** [More Information Needed]
-- **Paper [optional]:** [More Information Needed]
-- **Demo [optional]:** [More Information Needed]
+- **Repository:** [https://github.com/tashevski/opencivics-ai-model](https://github.com/tashevski/opencivics-ai-model)
+- **CLI Tool:** Included in this repository
+- **Base Model:** [microsoft/Phi-4-mini-reasoning](https://huggingface.co/microsoft/Phi-4-mini-reasoning)
 
 ## Uses
 
-<!-- Address questions around how the model is intended to be used, including the foreseeable users of the model and those affected by the model. -->
-
 ### Direct Use
 
-<!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
+The model is designed for direct use in policy analysis and civic engagement scenarios through the provided CLI tool:
 
-[More Information Needed]
+- **Policy Document Analysis:** Extract key insights from legislative documents, policy papers, and government reports
+- **Stakeholder Identification:** Automatically identify affected parties, decision-makers, and relevant organizations
+- **Document Summarization:** Generate concise summaries of complex policy documents
+- **Impact Assessment:** Analyze potential consequences of proposed policy changes
+- **Interactive Analysis:** Engage in conversational analysis of civic documents
 
-### Downstream Use [optional]
+### Target Users
 
-<!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
-
-[More Information Needed]
+- **Government Agencies:** Policy analysts, legislative drafters, and public administrators
+- **NGOs and Civil Society:** Community organizations analyzing policy impacts
+- **Researchers:** Academic and policy researchers studying governance and public policy
+- **Citizens:** Individuals seeking to understand complex policy documents
+- **Journalists:** Media professionals covering government and policy developments
 
 ### Out-of-Scope Use
 
-<!-- This section addresses misuse, malicious use, and uses that the model will not work well for. -->
+- **Legal Advice:** This model should not be used as a substitute for professional legal counsel
+- **Real-time Decision Making:** Not suitable for time-critical emergency response decisions
+- **Financial Analysis:** Not optimized for financial or economic modeling tasks
+- **Medical or Health Policy:** Requires domain expertise for health-related policy analysis
 
-[More Information Needed]
+## Technical Specifications
 
-## Bias, Risks, and Limitations
+### Model Architecture
 
-<!-- This section is meant to convey both technical and sociotechnical limitations. -->
+- **Base Architecture:** Phi-4-mini-reasoning (Microsoft)
+- **Fine-tuning Method:** LoRA (Low-Rank Adaptation)
+- **Model Format:** SafeTensors with PEFT adapters
+- **Context Length:** Inherited from base model
+- **Parameters:** Base model parameters + LoRA adapters
 
-[More Information Needed]
+### Hardware Requirements
 
-### Recommendations
+- **Minimum:** 8GB RAM, CPU-only inference supported
+- **Recommended:** 16GB+ RAM with GPU (CUDA or MPS)
+- **Supported Platforms:** 
+  - CUDA (NVIDIA GPUs)
+  - MPS (Apple Silicon)
+  - CPU (Intel/AMD)
 
-<!-- This section is meant to convey recommendations with respect to the bias, risk, and technical limitations. -->
+### Software Dependencies
 
-Users (both direct and downstream) should be made aware of the risks, biases and limitations of the model. More information needed for further recommendations.
+```
+torch>=1.9.0
+transformers>=4.21.0
+peft>=0.16.0
+python>=3.8
+```
 
-## How to Get Started with the Model
+## Installation and Usage
 
-Use the code below to get started with the model.
+### Prerequisites
 
-[More Information Needed]
+1. Python 3.8 or higher
+2. Required Python packages (see requirements in CLI tool)
+
+### Basic Usage
+
+#### Interactive Mode
+```bash
+python policy_llm/cli.py --interactive
+```
+
+Start an interactive session where you can ask questions about policy documents in natural language.
+
+#### File Processing
+```bash
+# Process a single document
+python policy_llm/cli.py --file input.txt --output analysis.txt
+
+# Batch processing with custom parameters
+python policy_llm/cli.py --file policy.pdf --max-length 1024 --temperature 0.7
+```
+
+#### Direct Prompts
+```bash
+# Quick analysis
+python policy_llm/cli.py --prompt "What are the main environmental impacts mentioned in this policy?"
+
+# Custom generation parameters
+python policy_llm/cli.py --prompt "Identify stakeholders" --temperature 0.9 --max-length 512
+```
+
+### CLI Parameters
+
+- `--interactive` / `-i`: Start interactive mode
+- `--prompt` / `-p`: Direct prompt input
+- `--file` / `-f`: Input file path
+- `--output` / `-o`: Output file path
+- `--max-length` / `-m`: Maximum generation length (default: 512)
+- `--temperature` / `-t`: Sampling temperature (default: 0.7)
+- `--adapter-path` / `-a`: Custom adapter path
 
 ## Training Details
 
 ### Training Data
 
-<!-- This should link to a Dataset Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
+The model was fine-tuned on a curated dataset of Australian policy documents, including:
+- Legislative texts and bills
+- Policy white papers and discussion documents
+- Government reports and analyses
+- Consultation documents
+- Regulatory frameworks
 
-[More Information Needed]
+*Note: All training data consisted of publicly available government documents to ensure transparency and avoid privacy concerns.*
 
 ### Training Procedure
 
-<!-- This relates heavily to the Technical Specifications. Content here should link to that section when it is relevant to the training procedure. -->
+- **Fine-tuning Method:** LoRA (Low-Rank Adaptation)
+- **Training Framework:** PEFT (Parameter Efficient Fine-Tuning)
+- **Base Model:** microsoft/Phi-4-mini-reasoning
+- **Optimization:** AdamW optimizer
+- **Learning Rate:** Scheduled with warmup
+- **Training Duration:** Multiple epochs with validation monitoring
 
-#### Preprocessing [optional]
+### Framework Versions
 
-[More Information Needed]
-
-
-#### Training Hyperparameters
-
-- **Training regime:** [More Information Needed] <!--fp32, fp16 mixed precision, bf16 mixed precision, bf16 non-mixed precision, fp16 non-mixed precision, fp8 mixed precision -->
-
-#### Speeds, Sizes, Times [optional]
-
-<!-- This section provides information about throughput, start/end time, checkpoint size if relevant, etc. -->
-
-[More Information Needed]
+- **PEFT:** 0.16.1.dev0
+- **Transformers:** Compatible with latest stable releases
+- **PyTorch:** 1.9.0+
 
 ## Evaluation
 
-<!-- This section describes the evaluation protocols and provides the results. -->
+The model has been evaluated on policy document analysis tasks including:
+- Document summarization accuracy
+- Stakeholder identification precision
+- Policy impact assessment quality
+- Response relevance and coherence
 
-### Testing Data, Factors & Metrics
+*Detailed evaluation metrics and benchmarks are available in the full technical documentation.*
 
-#### Testing Data
+## Bias, Risks, and Limitations
 
-<!-- This should link to a Dataset Card if possible. -->
+### Known Limitations
 
-[More Information Needed]
+- **Domain Specificity:** Optimized for Australian policy context; may require adaptation for other jurisdictions
+- **Document Types:** Best performance on formal policy documents; informal communications may yield variable results
+- **Language:** Primarily trained on English-language documents
+- **Temporal Scope:** Training data reflects policies up to the training date
 
-#### Factors
+### Potential Biases
 
-<!-- These are the things the evaluation is disaggregating by, e.g., subpopulations or domains. -->
+- **Institutional Bias:** May reflect perspectives present in government documents
+- **Temporal Bias:** Training data may not reflect the most recent policy developments
+- **Language Bias:** Optimized for formal policy language rather than colloquial expressions
 
-[More Information Needed]
+### Recommendations
 
-#### Metrics
-
-<!-- These are the evaluation metrics being used, ideally with a description of why. -->
-
-[More Information Needed]
-
-### Results
-
-[More Information Needed]
-
-#### Summary
-
-
-
-## Model Examination [optional]
-
-<!-- Relevant interpretability work for the model goes here -->
-
-[More Information Needed]
+- Always validate model outputs with domain expertise
+- Use as a starting point for analysis, not a final authority
+- Consider multiple perspectives when interpreting policy implications
+- Regularly update with newer policy documents for optimal performance
 
 ## Environmental Impact
 
-<!-- Total emissions (in grams of CO2eq) and additional considerations, such as electricity usage, go here. Edit the suggested text below accordingly -->
+This model uses LoRA fine-tuning, which significantly reduces computational requirements compared to full model fine-tuning:
+- **Training Efficiency:** LoRA reduces trainable parameters by ~99%
+- **Inference Efficiency:** Standard inference costs with adapter overhead
+- **Carbon Footprint:** Minimal additional impact beyond base model usage
 
-Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
+## License and Usage
 
-- **Hardware Type:** [More Information Needed]
-- **Hours used:** [More Information Needed]
-- **Cloud Provider:** [More Information Needed]
-- **Compute Region:** [More Information Needed]
-- **Carbon Emitted:** [More Information Needed]
+This model and associated CLI tool are released under the Apache 2.0 license to promote open access to policy analysis capabilities. Users are encouraged to:
+- Use the model for civic and policy analysis purposes
+- Contribute improvements and extensions
+- Share findings that benefit the broader civic tech community
+- Respect the ethical guidelines for AI use in governance contexts
 
-## Technical Specifications [optional]
+## Citation
 
-### Model Architecture and Objective
+If you use this model in your research or applications, please cite:
 
-[More Information Needed]
+```bibtex
+@misc{opencivics-ai-model-2025,
+  title={OpenCivics AI Model: A Fine-tuned Language Model for Policy Analysis},
+  author={OpenCivics Initiative},
+  year={2025},
+  publisher={OpenCivics},
+  url={https://github.com/tashevski/opencivics-ai-model}
+}
+```
 
-### Compute Infrastructure
+## Support and Contact
 
-[More Information Needed]
+- **Issues:** Report bugs and feature requests on GitHub
+- **Documentation:** Visit the OpenCivics website for comprehensive guides
+- **Community:** Join discussions about civic technology and policy analysis
+- **Contact:** For inquiries about partnerships or custom applications
 
-#### Hardware
+## Acknowledgments
 
-[More Information Needed]
+- **Base Model:** Microsoft Research for the Phi-4-mini-reasoning model
+- **Framework:** Hugging Face for the transformers and PEFT libraries
+- **Community:** Contributors to open policy data and civic technology initiatives
 
-#### Software
+---
 
-[More Information Needed]
-
-## Citation [optional]
-
-<!-- If there is a paper or blog post introducing the model, the APA and Bibtex information for that should go in this section. -->
-
-**BibTeX:**
-
-[More Information Needed]
-
-**APA:**
-
-[More Information Needed]
-
-## Glossary [optional]
-
-<!-- If relevant, include terms and calculations in this section that can help readers understand the model or model card. -->
-
-[More Information Needed]
-
-## More Information [optional]
-
-[More Information Needed]
-
-## Model Card Authors [optional]
-
-[More Information Needed]
-
-## Model Card Contact
-
-[More Information Needed]
-### Framework versions
-
-- PEFT 0.16.1.dev0
+*This model is part of the OpenCivics initiative to democratize access to advanced policy analysis tools and promote evidence-based decision-making in government and civil society.*
